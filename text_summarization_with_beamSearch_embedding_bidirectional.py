@@ -46,7 +46,7 @@ data_directory_path = "Data/"
 reviews_data = data_directory_path + "Reviews.csv"
 gloveEmbeddingsPath = data_directory_path + "glove.6B.100d.txt"
 
-reviews_df = pd.read_csv(reviews_data,nrows=100000)
+reviews_df = pd.read_csv(reviews_data)
 # reviews_df = pd.read_csv(reviews_data)
 
 data_df = reviews_df.filter(items=["Summary","Text"])
@@ -276,8 +276,8 @@ FullModel.summary()
 
 FullModel.compile(optimizer='rmsprop', loss='sparse_categorical_crossentropy')
 
-es = EarlyStopping(monitor='val_loss', mode='min', verbose=1,patience=5)
-FullModelcheckpoint = tf.keras.callbacks.ModelCheckpoint("./saved_model_100000_with_embeddings_beam_bidirectional/FullModelWeights.h5",
+es = EarlyStopping(monitor='val_loss', mode='min', verbose=1,patience=10)
+FullModelcheckpoint = tf.keras.callbacks.ModelCheckpoint("./saved_model_All_with_embeddings_beam_bidirectional/FullModelWeights.h5",
                                                          monitor='loss', verbose=1,
     save_best_only=True,save_weights_only = True, mode='auto', period=1)
 
@@ -287,7 +287,7 @@ if isTrain == True:
                       epochs=50,callbacks=[es,FullModelcheckpoint],batch_size=400, 
                       validation_data=([xValid,yValid[:,:-1]], yValid[:,1:]))
 
-FullModel.load_weights("./saved_model_100000_with_embeddings_beam_bidirectional/FullModelWeights.h5")
+FullModel.load_weights("./saved_model_All_with_embeddings_beam_bidirectional/FullModelWeights.h5")
 
 reverse_target_word_index=y_tokenizer.index_word
 reverse_target_word_index[0] = "padtok"
