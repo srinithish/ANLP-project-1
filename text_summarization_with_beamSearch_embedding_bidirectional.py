@@ -12,7 +12,7 @@ Original file is located at
 # %pwd
 # %cd drive/My Drive/ANLP-Project/
 # %pwd
-isTrain = True
+isTrain = False
 import tensorflow as tf
 import numpy as np
 import pandas as pd 

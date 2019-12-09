@@ -467,6 +467,11 @@ for i in range(0,50):
     print("Predicted summary:",decode_sequence(xValid[i].reshape(1,max_text_len))) 
     print("\n")
 
+print("Review:",seq2text(xValid[i]))
+print("Original summary:",seq2summary(yValid[i]))
+print("Predicted summary:",decode_sequence(xValid[i].reshape(1,max_text_len))) 
+print("\n")
+
 
 """##TODO
 1. If the word is not found in embedding lemmatize and check again
