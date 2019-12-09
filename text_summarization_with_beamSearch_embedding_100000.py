@@ -461,7 +461,7 @@ for i in range(0,20):
     print("\n")
     
 #### without beam search
-for i in range(0,20):
+for i in range(0,50):
     print("Review:",seq2text(xValid[i]))
     print("Original summary:",seq2summary(yValid[i]))
     print("Predicted summary:",decode_sequence(xValid[i].reshape(1,max_text_len))) 

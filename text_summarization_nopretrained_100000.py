@@ -14,6 +14,7 @@ Original file is located at
 # %cd drive/My Drive/ANLP-Project/
 # %pwd
 
+isTrain = False
 import tensorflow as tf
 import numpy as np
 import pandas as pd 
@@ -39,7 +40,7 @@ nltk.download('punkt')
 
 assert(tf.__version__ == "2.0.0")
 
-data_directory_path = ""
+data_directory_path = "./Data/"
 reviews_data = data_directory_path + "Reviews.csv"
 
 reviews_df = pd.read_csv(reviews_data,nrows=100000)
@@ -237,14 +238,15 @@ es = EarlyStopping(monitor='val_loss', mode='min', verbose=1,patience=2)
 FullModelcheckpoint = tf.keras.callbacks.ModelCheckpoint("FullModelWeights_100000_epoch_{epoch:02d}_{val_loss:.2f}.h5", monitor='loss', verbose=1,
     save_best_only=False,save_weights_only = True, mode='auto', period=1)
 
-history=FullModel.fit([xTrain,yTrain[:,:-1]], 
-                  yTrain[:,1:] ,
-                  epochs=50,callbacks=[es,FullModelcheckpoint],batch_size=200, 
-                  validation_data=([xValid,yValid[:,:-1]], yValid[:,1:]))
+if isTrain == True:
+    history=FullModel.fit([xTrain,yTrain[:,:-1]], 
+                      yTrain[:,1:] ,
+                      epochs=50,callbacks=[es,FullModelcheckpoint],batch_size=200, 
+                      validation_data=([xValid,yValid[:,:-1]], yValid[:,1:]))
 
 
 
-FullModel.load_weights("FullModelWeights_100000_epoch_39_1.40.h5")
+FullModel.load_weights("./saved_model_100000_nopretrained embeddings/FullModelWeights_100000_epoch_39_1.40.h5")
 
 reverse_target_word_index=y_tokenizer.index_word
 reverse_source_word_index=x_tokenizer.index_word
@@ -262,8 +264,8 @@ encoder_outputs_for_attention = Input(shape=(max_text_len,latent_dim)) ## all se
 ## encoder only model so as to get the encoder outputs
 encoder_model_inf = Model(inputs=encoder_inputs,outputs=[encoder_outputs, state_h, state_c])
 
-encoder_model_inf.save("encoderModel.h5")
-encoder_model_inf = tf.keras.models.load_model("encoderModel.h5")
+#encoder_model_inf.save("encoderModel.h5")
+#encoder_model_inf = tf.keras.models.load_model("encoderModel.h5")
 
  ## getting the embedings in the summary
 dec_emb_inf = dec_emb
@@ -286,8 +288,8 @@ decoder_model_inf = Model(
     [decoder_outputs_inf] + [state_h_decoder, state_c_decoder])
 
 
-decoder_model_inf.save_weights("decoderInferenceModel.h5")
-decoder_model_inf.load_weights("decoderInferenceModel.h5")
+#decoder_model_inf.save_weights("decoderInferenceModel.h5")
+#decoder_model_inf.load_weights("decoderInferenceModel.h5")
 
 
 #decoder_model_inf = tf.keras.models.load_model("decoderInferenceModel.h5")
@@ -345,8 +347,8 @@ def seq2text(input_seq):
     return newString
 
 for i in range(0,50):
-    print("Review:",seq2text(xTrain[i]))
-    print("Original summary:",seq2summary(yTrain[i]))
-    print("Predicted summary:",decode_sequence(xTrain[i].reshape(1,max_text_len))) 
+    print("Review:",seq2text(xValid[i]))
+    print("Original summary:",seq2summary(yValid[i]))
+    print("Predicted summary:",decode_sequence(xValid[i].reshape(1,max_text_len))) 
     print("\n")
 
