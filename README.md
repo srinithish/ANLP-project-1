@@ -1,4 +1,2 @@
 # ANLP-project
-
-Google Docs:
-https://docs.google.com/document/d/103rxbocFTvP155Tz1k2u0NcnKwBF1_YY-zOrYCe-55Y/edit
+![Result1](https://github.com/srinithish/product-recognition/blob/master/results/download%20(8).png)
